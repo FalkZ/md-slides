@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Slides Theme",
+  "description": "Theme configuration for vaxis slides. Values are space-separated Tailwind-like classes: bg-{color}-{shade}, text-{color}-{shade}, font-bold, font-italic, font-dim, underline, no-underline, decoration-solid, decoration-double, decoration-wavy, decoration-dotted, decoration-dashed. Hex colors supported: text-[#rrggbb], bg-[#rrggbb].",
+  "type": "object",
+  "properties": {
+    "light": { "$ref": "#/$defs/modeTheme" },
+    "dark": { "$ref": "#/$defs/modeTheme" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "classes": {
+      "type": "string",
+      "description": "Space-separated Tailwind classes (e.g. 'text-blue-400 font-bold', 'bg-[#282c34]', 'underline decoration-double')"
+    },
+    "modeTheme": {
+      "type": "object",
+      "properties": {
+        "root": {
+          "$ref": "#/$defs/classes",
+          "description": "Root window background"
+        },
+        "p": { "$ref": "#/$defs/classes", "description": "Paragraph text" },
+        "h1": { "$ref": "#/$defs/classes", "description": "Heading level 1" },
+        "h2": { "$ref": "#/$defs/classes", "description": "Heading level 2" },
+        "h3": { "$ref": "#/$defs/classes", "description": "Heading level 3" },
+        "h4": { "$ref": "#/$defs/classes", "description": "Heading level 4" },
+        "h5": { "$ref": "#/$defs/classes", "description": "Heading level 5" },
+        "h6": { "$ref": "#/$defs/classes", "description": "Heading level 6" },
+        "blockquote": {
+          "$ref": "#/$defs/classes",
+          "description": "Blockquote text"
+        },
+        "link": { "$ref": "#/$defs/classes", "description": "Link text" },
+        "img": { "$ref": "#/$defs/classes", "description": "Image alt text" },
+        "list": { "$ref": "#/$defs/classes", "description": "List item text" },
+        "hr": { "$ref": "#/$defs/classes", "description": "Horizontal rule" },
+        "status": { "$ref": "#/$defs/classes", "description": "Status bar" },
+        "code": { "$ref": "#/$defs/codeTheme" },
+        "table": { "$ref": "#/$defs/tableTheme" }
+      },
+      "additionalProperties": false
+    },
+    "codeTheme": {
+      "type": "object",
+      "properties": {
+        "block": {
+          "$ref": "#/$defs/classes",
+          "description": "Fenced code block base style"
+        },
+        "inline": {
+          "$ref": "#/$defs/classes",
+          "description": "Inline code span style"
+        },
+        "syntax": { "$ref": "#/$defs/syntaxTheme" }
+      },
+      "additionalProperties": false
+    },
+    "syntaxTheme": {
+      "type": "object",
+      "properties": {
+        "keyword": { "$ref": "#/$defs/classes" },
+        "string": { "$ref": "#/$defs/classes" },
+        "comment": { "$ref": "#/$defs/classes" },
+        "function": { "$ref": "#/$defs/classes" },
+        "function_method": { "$ref": "#/$defs/classes" },
+        "function_builtin": { "$ref": "#/$defs/classes" },
+        "function_name": { "$ref": "#/$defs/classes" },
+        "type": { "$ref": "#/$defs/classes" },
+        "number": { "$ref": "#/$defs/classes" },
+        "operator": { "$ref": "#/$defs/classes" },
+        "variable": { "$ref": "#/$defs/classes" },
+        "property": { "$ref": "#/$defs/classes" },
+        "constant_builtin": { "$ref": "#/$defs/classes" },
+        "escape": { "$ref": "#/$defs/classes" }
+      },
+      "additionalProperties": false
+    },
+    "tableTheme": {
+      "type": "object",
+      "properties": {
+        "header": {
+          "$ref": "#/$defs/classes",
+          "description": "Table header row"
+        },
+        "cell": {
+          "$ref": "#/$defs/classes",
+          "description": "Table body cells"
+        },
+        "separator": {
+          "$ref": "#/$defs/classes",
+          "description": "Table separators and borders"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
