@@ -35,8 +35,7 @@ type ModeTheme struct {
 	CodeInline     vaxis.Style
 	CodeBlock      vaxis.Style
 	Table          TableTheme
-	HorizontalRule vaxis.Style
-	Image          vaxis.Style
+	Image vaxis.Style
 	List           vaxis.Style
 	Status         vaxis.Style
 	Syntax         SyntaxTheme

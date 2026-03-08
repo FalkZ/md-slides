@@ -59,3 +59,27 @@ Selection of the mode is done via system preference. and can be changed with a k
 
 The whole theme schema is validated and gives warnings in the footer when theme is invalid.
 A JSON schema definition is used to validate.
+
+## Theme extension
+
+Themes can be loaded by the extends keyword.
+
+```md
+---
+theme:
+  extends: https://example.com/theme.yaml
+---
+```
+
+# Url Loading `./fetch.go`
+
+Themes and images can also be provided by url.
+
+On encountering url use a utility that fetches these resources and stores them in the os's temp folder.
+The them files should be deleted on tui closing.
+
+Handle failed fetches gracefully.
+
+Always refetch on restart of the tui.
+
+A `resolveUrl` function will resolve a url to a temp file path.

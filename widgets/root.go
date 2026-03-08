@@ -44,8 +44,6 @@ func NewSlide(nodes []ast.Node, source []byte, theme theming.ModeTheme) Slide {
 			widget = NewList(node.(*ast.List), source)
 		case ast.KindBlockquote:
 			widget = NewBlockquote(node, source, theme)
-		case ast.KindThematicBreak:
-			widget = NewHR(40, theme)
 		default:
 			if node.Kind() == gfmAst.KindTable {
 				widget = NewTable(node, source, theme)

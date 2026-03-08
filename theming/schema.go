@@ -20,7 +20,7 @@ var validTopKeys = map[string]bool{
 	"root": true, "p": true,
 	"h1": true, "h2": true, "h3": true, "h4": true, "h5": true, "h6": true,
 	"blockquote": true, "link": true, "link_url": true,
-	"list": true, "hr": true, "status": true,
+	"list": true, "status": true,
 	"code": true, "table": true,
 }
 
@@ -55,6 +55,9 @@ func Validate(frontmatterYAML []byte) []ValidationWarning {
 
 	var warnings []ValidationWarning
 	for modeName, modeNode := range wrapper.Theme {
+		if modeName == "extends" {
+			continue
+		}
 		if modeName != "light" && modeName != "dark" {
 			warnings = append(warnings, ValidationWarning{
 				Path:    "theme." + modeName,

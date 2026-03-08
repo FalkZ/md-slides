@@ -32,12 +32,12 @@ More content
 
 ## Markdown Support
 
-- Headings (`# h1` through `###### h6`)
+- Headings
 - Paragraphs
-- Unordered and ordered lists
+- Lists (unordered and ordered)
 - **Bold**, _italic_, ~~strikethrough~~
-- Fenced code blocks with syntax highlighting
-- `Inline code`
+- Code blocks (with syntax highlighting)
+- Inline code
 - Blockquotes
 - Tables (GFM-style)
 - [Links](https://example.com) and auto-links
@@ -45,21 +45,27 @@ More content
 
 ## Images
 
-> For best performance use a terminal that supports Kitty. For example Ghostty.
-
 Standard markdown image syntax:
 
 ```markdown
 ![Alt text](./image.png)
 ```
 
-Optionally specify height in terminal rows using a pipe delimiter in the alt text:
+### Image size by rows
+
+Optionally specify image height in rows using a pipe delimiter in the alt text:
 
 ```markdown
 ![Alt text | 12](./image.png)
 ```
 
-If omitted, images default to 20 rows. Image paths are resolved relative to the markdown file's directory. Supports Kitty graphics, Sixel, and standard terminal graphics protocols.
+If omitted, images default to 20 rows.
+
+### Image support
+
+For best results, use a terminal that supports the Kitty graphics protocol, such as Ghostty or Kitty. Sixel and other standard terminal graphics protocols are also supported.
+
+Image paths are resolved relative to the markdown file's directory.
 
 ## Syntax Highlighting
 
@@ -108,7 +114,6 @@ theme:
 | `link`            | Links               |
 | `img`             | Image fallback text |
 | `list`            | Lists               |
-| `hr`              | Horizontal rules    |
 | `status`          | Status bar          |
 | `code.block`      | Code blocks         |
 | `code.inline`     | Inline code         |
@@ -127,11 +132,30 @@ theme:
 
 **Text color:** `text-{color}-{shade}`, `text-white`, `text-black`, `text-[#RRGGBB]`
 
-**Background:** `bg-{color}-{shade}`, `bg-[#RRGGBB]`
+**Background:** `bg-{color}-{shade}`, `bg-white`, `bg-black`, `bg-[#RRGGBB]`
 
-**Underline:** `underline`, `decoration-double`, `decoration-wavy`, `decoration-dotted`, `decoration-dashed`, `no-underline`
+**Underline:** `decoration-single`, `decoration-solid`, `decoration-double`, `decoration-wavy`, `decoration-dotted`, `decoration-dashed`
 
 Colors: slate, gray, zinc, neutral, stone, red, orange, amber, yellow, lime, green, emerald, teal, cyan, sky, blue, indigo, violet, purple, fuchsia, pink, rose (shades: 50-950)
+
+### Theme Extension
+
+Use the `extends` property to base your theme on an external theme file (local path or URL). Only the keys you specify are overridden; everything else is inherited from the extended theme:
+
+```yaml
+---
+theme:
+  extends: https://example.com/my-base-theme.yaml
+  light:
+    h1: text-pink-500 font-bold
+  dark:
+    h1: text-pink-400 font-bold
+---
+```
+
+The merge order is: **default theme → extended theme → frontmatter overrides**. This means you can create reusable theme files and customize only what you need per presentation.
+
+Partial themes work at the property level — setting `h1: text-pink-500` only changes the heading color while preserving any background, underline, or font style from the base theme.
 
 ## Default Theme
 
@@ -150,9 +174,9 @@ Based on [Zed](https://github.com/zed-industries/zed) One Dark / One Light. Auto
 
 ## CLI Flags
 
-| Flag                | Description                           |
-| ------------------- | ------------------------------------- |
-| `--debug`           | Write debug XML output to disk        |
-| `--schema`          | Print theme JSON schema and exit      |
-| `--dump <page>`     | Dump rendered page as XML (1-indexed) |
-| `--dump-raw <page>` | Dump raw terminal output of a page    |
+| Flag                 | Description                           |
+| -------------------- | ------------------------------------- |
+| `--debug`            | Write debug XML output to disk        |
+| `--schema`           | Print theme JSON schema and exit      |
+| `--dump-xml <page>`  | Dump rendered page as XML (1-indexed) |
+| `--dump-text <page>` | Dump raw terminal output of a page    |

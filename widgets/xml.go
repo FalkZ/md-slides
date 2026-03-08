@@ -30,8 +30,12 @@ func segToXml(seg vaxis.Segment) XmlNode {
 	if seg.Style.Attribute != 0 {
 		attrs = append(attrs, xml.Attr{Name: xml.Name{Local: "attr"}, Value: attrString(seg.Style.Attribute)})
 	}
+	if seg.Style.UnderlineStyle != 0 {
+		attrs = append(attrs, xml.Attr{Name: xml.Name{Local: "underline"}, Value: fmt.Sprint(seg.Style.UnderlineStyle)})
+	}
 	if seg.Style.Hyperlink != "" {
 		attrs = append(attrs, xml.Attr{Name: xml.Name{Local: "hyperlink"}, Value: seg.Style.Hyperlink})
+		attrs = append(attrs, xml.Attr{Name: xml.Name{Local: "hyperlink-id"}, Value: seg.Style.HyperlinkParams})
 	}
 	return XmlNode{XMLName: xml.Name{Local: "seg"}, Attrs: attrs}
 }

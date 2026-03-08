@@ -16,7 +16,7 @@ func ParseClasses(classes string) vaxis.Style {
 			style.Attribute |= vaxis.AttrItalic
 		case class == "font-dim":
 			style.Attribute |= vaxis.AttrDim
-		case class == "underline", class == "decoration-solid":
+		case class == "decoration-single", class == "decoration-solid":
 			style.UnderlineStyle = vaxis.UnderlineSingle
 		case class == "decoration-double":
 			style.UnderlineStyle = vaxis.UnderlineDouble
@@ -26,8 +26,6 @@ func ParseClasses(classes string) vaxis.Style {
 			style.UnderlineStyle = vaxis.UnderlineDotted
 		case class == "decoration-dashed":
 			style.UnderlineStyle = vaxis.UnderlineDashed
-		case class == "no-underline":
-			style.UnderlineStyle = vaxis.UnderlineOff
 		case strings.HasPrefix(class, "bg-"):
 			if color, ok := lookupColor(class[3:]); ok {
 				style.Background = color
@@ -45,7 +43,7 @@ func ValidateClass(class string) bool {
 	switch {
 	case class == "font-bold", class == "font-italic", class == "font-dim":
 		return true
-	case class == "underline", class == "no-underline",
+	case class == "decoration-single",
 		class == "decoration-solid", class == "decoration-double",
 		class == "decoration-wavy", class == "decoration-dotted",
 		class == "decoration-dashed":

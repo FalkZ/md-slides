@@ -21,7 +21,7 @@ type parsedMarkdown struct {
 
 func parseMarkdown(raw []byte, mode theming.Mode) parsedMarkdown {
 	frontmatter, body := theming.ExtractFrontmatter(raw)
-	theme := theming.ParseTheme(frontmatter)
+	theme := theming.ParseThemeWithResolver(frontmatter, resolveUrl)
 	warnings := theming.Validate(frontmatter)
 	doc := md.Parser().Parse(text.NewReader(body))
 	modeTheme := theme.ForMode(mode)

@@ -2,7 +2,7 @@ package widgets
 
 import (
 	"encoding/xml"
-	"log"
+	"log/slog"
 	"strings"
 
 	"git.sr.ht/~rockorager/vaxis"
@@ -51,12 +51,6 @@ func (w *CodeBlockWidget) Draw(ctx vxfw.DrawContext) (vxfw.Surface, error) {
 	return t.Draw(ctx)
 }
 
-var hlLogger *log.Logger
-
-func SetLogger(l *log.Logger) {
-	hlLogger = l
-}
-
 var highlighterCache = map[string]*gotreesitter.Highlighter{}
 
 func getHighlighter(lang string) *gotreesitter.Highlighter {
@@ -85,9 +79,7 @@ func getHighlighter(lang string) *gotreesitter.Highlighter {
 	}
 	h, err := gotreesitter.NewHighlighter(langObj, entry.HighlightQuery, opts...)
 	if err != nil {
-		if hlLogger != nil {
-			hlLogger.Printf("highlighter error for %s: %v", lang, err)
-		}
+		slog.Debug("highlighter error", "lang", lang, "error", err)
 		highlighterCache[lang] = nil
 		return nil
 	}

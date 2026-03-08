@@ -109,7 +109,7 @@ func main() {
 
 ## Links
 
-Inline links: [md-slides on GitHub](https://github.com)
+Inline links: [md-slides on GitHub](https://github.com/FalkZ/md-slides)
 
 Autolinks: <https://github.com>
 
@@ -131,7 +131,7 @@ Autolinks: <https://github.com>
 
 Standard image:
 
-![Make a sandwich](./xkcd-sandwich.png)
+![Make a sandwich](https://imgs.xkcd.com/comics/sandwich.png)
 
 _Image from: <https://xkcd.com/149/>_
 
@@ -186,6 +186,23 @@ Press `t` to toggle between light and dark mode.
 | G / End               | Last slide     |
 | t                     | Toggle theme   |
 | q / Ctrl+c            | Quit           |
+
+---
+
+## Theme inheritance
+
+Use `extends` to inherit from a base theme (URL or local path):
+
+```yaml
+---
+theme:
+  extends: https://example.com/theme.yaml
+  light:
+    h1: text-red-600
+---
+```
+
+Merge order: default → extended → local overrides.
 
 ---
 

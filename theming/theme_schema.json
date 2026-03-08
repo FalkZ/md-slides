@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Slides Theme",
-  "description": "Theme configuration for vaxis slides. Values are space-separated Tailwind-like classes: bg-{color}-{shade}, text-{color}-{shade}, font-bold, font-italic, font-dim, underline, no-underline, decoration-solid, decoration-double, decoration-wavy, decoration-dotted, decoration-dashed. Hex colors supported: text-[#rrggbb], bg-[#rrggbb].",
+  "description": "Theme configuration for md-slides. Values are space-separated Tailwind-like classes: bg-{color}-{shade}, text-{color}-{shade}, font-bold, font-italic, font-dim, decoration-single, decoration-solid, decoration-double, decoration-wavy, decoration-dotted, decoration-dashed. Hex colors supported: text-[#rrggbb], bg-[#rrggbb].",
   "type": "object",
   "properties": {
     "light": { "$ref": "#/$defs/modeTheme" },
@@ -11,7 +11,7 @@
   "$defs": {
     "classes": {
       "type": "string",
-      "description": "Space-separated Tailwind classes (e.g. 'text-blue-400 font-bold', 'bg-[#282c34]', 'underline decoration-double')"
+      "description": "Space-separated Tailwind classes (e.g. 'text-blue-400 font-bold', 'bg-[#282c34]', 'decoration-single decoration-double')"
     },
     "modeTheme": {
       "type": "object",
@@ -34,7 +34,6 @@
         "link": { "$ref": "#/$defs/classes", "description": "Link text" },
         "img": { "$ref": "#/$defs/classes", "description": "Image alt text" },
         "list": { "$ref": "#/$defs/classes", "description": "List item text" },
-        "hr": { "$ref": "#/$defs/classes", "description": "Horizontal rule" },
         "status": { "$ref": "#/$defs/classes", "description": "Status bar" },
         "code": { "$ref": "#/$defs/codeTheme" },
         "table": { "$ref": "#/$defs/tableTheme" }

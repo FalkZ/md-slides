@@ -1,12 +1,14 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
-	"log"
+	"log/slog"
 	"os"
 	"path/filepath"
 
 	"strconv"
+	"time"
 
 	"git.sr.ht/~rockorager/vaxis"
 	"git.sr.ht/~rockorager/vaxis/vxfw"
@@ -14,15 +16,25 @@ import (
 	"github.com/FalkZ/md-slides/widgets"
 )
 
-var logger *log.Logger
+//go:embed themes/one.yaml
+var defaultThemeYAML []byte
 
-func initLog() {
+func init() {
+	theming.SetDefaultThemeYAML(defaultThemeYAML)
+}
+
+func initLog(debug bool) *os.File {
+	if !debug {
+		slog.SetDefault(slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: slog.LevelWarn})))
+		return nil
+	}
 	f, err := os.Create("slides.log")
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "cannot create log file:", err)
 		os.Exit(1)
 	}
-	logger = log.New(f, "", log.Ltime|log.Lmicroseconds)
+	slog.SetDefault(slog.New(slog.NewTextHandler(f, &slog.HandlerOptions{Level: slog.LevelDebug})))
+	return f
 }
 
 func isEmptyCell(cell vaxis.Cell) bool {
@@ -72,7 +84,7 @@ func main() {
 		case "--schema":
 			os.Stdout.Write(theming.ThemeSchema())
 			return
-		case "--dump", "--dump-raw":
+		case "--dump-xml", "--dump-text":
 			flag := os.Args[i]
 			i++
 			if i >= len(os.Args) {
@@ -84,7 +96,7 @@ func main() {
 				fmt.Fprintf(os.Stderr, "error: invalid page number %q\n", os.Args[i])
 				os.Exit(1)
 			}
-			if flag == "--dump" {
+			if flag == "--dump-xml" {
 				dumpPage = n
 			} else {
 				dumpRawPage = n
@@ -94,21 +106,21 @@ func main() {
 		}
 	}
 	if len(args) < 1 {
-		fmt.Fprintln(os.Stderr, "usage: slides [--debug] [--schema] [--dump <page>] [--dump-raw <page>] <file.md>")
+		fmt.Fprintln(os.Stderr, "usage: slides [--debug] [--schema] [--dump-xml <page>] [--dump-text <page>] <file.md>")
 		os.Exit(1)
 	}
 
-	initLog()
-	widgets.SetLogger(logger)
-	logger.Println("starting slides")
-
+	logFile := initLog(debug)
+	if logFile != nil {
+		defer logFile.Close()
+	}
 	mdPath, err := filepath.Abs(args[0])
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	baseDir := filepath.Dir(mdPath)
-	logger.Printf("markdown: %s (base: %s)", mdPath, baseDir)
+	slog.Debug("markdown", "path", mdPath, "base", baseDir)
 
 	raw, err := os.ReadFile(mdPath)
 	if err != nil {
@@ -124,11 +136,9 @@ func main() {
 		fmt.Fprintln(os.Stderr, "no slides found")
 		os.Exit(1)
 	}
-	logger.Printf("parsed %d slides", len(slides))
-	if len(parsed.warnings) > 0 {
-		for _, w := range parsed.warnings {
-			logger.Printf("theme warning: %s", w)
-		}
+	slog.Debug("parsed slides", "count", len(slides))
+	for _, w := range parsed.warnings {
+		slog.Warn("theme warning", "message", w)
 	}
 
 	if dumpPage >= 0 || dumpRawPage >= 0 {
@@ -164,15 +174,17 @@ func main() {
 
 	page := 0
 
-	vx, err := vaxis.New(vaxis.Options{})
+	// Disable mouse tracking so terminals can handle OSC 8 hyperlink clicks natively
+	vx, err := vaxis.New(vaxis.Options{DisableMouse: true})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 	defer vx.Close()
+	defer cleanupTempFiles()
 
-	logger.Printf("vaxis initialized — kitty=%v sixel=%v graphics=%v rgb=%v",
-		vx.CanKittyGraphics(), vx.CanSixel(), vx.CanDisplayGraphics(), vx.CanRGB())
+	initW, initH := vx.Window().Size()
+	slog.Debug("vaxis initialized", "kitty", vx.CanKittyGraphics(), "sixel", vx.CanSixel(), "graphics", vx.CanDisplayGraphics(), "rgb", vx.CanRGB(), "cols", initW, "rows", initH)
 
 	cache := newImageCache(vx, baseDir)
 	defer cache.clear()
@@ -190,6 +202,7 @@ func main() {
 	statusStyle := theme.ForMode(currentMode).Status
 
 	render := func() {
+		start := time.Now()
 		win := vx.Window()
 		win.Clear()
 		rootBg := theme.ForMode(currentMode).Root
@@ -197,7 +210,7 @@ func main() {
 			win.Fill(vaxis.Cell{Style: vaxis.Style{Background: rootBg.Background}})
 		}
 		w, h := win.Size()
-		logger.Printf("render: page=%d window=%dx%d", page, w, h)
+		slog.Debug("render", "page", page, "width", w, "height", h)
 
 		s := slides[page]
 
@@ -207,7 +220,7 @@ func main() {
 
 		surf, err := slideW.Draw(drawCtx)
 		if err != nil {
-			logger.Printf("draw error: %v", err)
+			slog.Warn("draw error", "error", err)
 			return
 		}
 
@@ -235,6 +248,7 @@ func main() {
 		sub.Print(vaxis.Segment{Text: status, Style: st})
 
 		vx.Render()
+		slog.Debug("render duration", "ms", time.Since(start).Milliseconds())
 	}
 
 	render()
@@ -277,7 +291,7 @@ func main() {
 				statusStyle = theme.ForMode(currentMode).Status
 				cache.build(slides)
 				needsRender = true
-				logger.Printf("toggled theme to mode=%d", currentMode)
+				slog.Debug("toggled theme", "mode", currentMode)
 			}
 		case vaxis.ColorThemeUpdate:
 			newMode := theming.Dark
@@ -290,7 +304,7 @@ func main() {
 				statusStyle = theme.ForMode(currentMode).Status
 				cache.build(slides)
 				needsRender = true
-				logger.Printf("system theme changed to mode=%d", currentMode)
+				slog.Debug("system theme changed", "mode", currentMode)
 			}
 		case vaxis.Resize:
 			w, _ := vx.Window().Size()

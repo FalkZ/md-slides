@@ -2,24 +2,29 @@ package theming
 
 import (
 	_ "embed"
+	"os"
 
 	"git.sr.ht/~rockorager/vaxis"
 	"gopkg.in/yaml.v3"
 )
 
-//go:embed default_theme.yaml
 var defaultThemeYAML []byte
 
 //go:embed theme_schema.json
 var themeSchemaJSON []byte
+
+func SetDefaultThemeYAML(data []byte) {
+	defaultThemeYAML = data
+}
 
 func ThemeSchema() []byte {
 	return themeSchemaJSON
 }
 
 type rawTheme struct {
-	Light rawModeTheme `yaml:"light"`
-	Dark  rawModeTheme `yaml:"dark"`
+	Extends string       `yaml:"extends"`
+	Light   rawModeTheme `yaml:"light"`
+	Dark    rawModeTheme `yaml:"dark"`
 }
 
 type rawModeTheme struct {
@@ -35,8 +40,7 @@ type rawModeTheme struct {
 	Link       string       `yaml:"link"`
 	Image      string       `yaml:"img"`
 	List       string       `yaml:"list"`
-	HR         string       `yaml:"hr"`
-	Status     string       `yaml:"status"`
+	Status string `yaml:"status"`
 	Code       rawCodeTheme `yaml:"code"`
 	Table      rawTableTheme `yaml:"table"`
 }
@@ -75,6 +79,10 @@ func DefaultTheme() Theme {
 }
 
 func ParseTheme(frontmatterYAML []byte) Theme {
+	return ParseThemeWithResolver(frontmatterYAML, nil)
+}
+
+func ParseThemeWithResolver(frontmatterYAML []byte, resolver func(string) (string, error)) Theme {
 	if len(frontmatterYAML) == 0 {
 		return DefaultTheme()
 	}
@@ -84,9 +92,21 @@ func ParseTheme(frontmatterYAML []byte) Theme {
 	if err := yaml.Unmarshal(frontmatterYAML, &wrapper); err != nil {
 		return DefaultTheme()
 	}
+
+	base := DefaultTheme()
+	if wrapper.Theme.Extends != "" && resolver != nil {
+		path, err := resolver(wrapper.Theme.Extends)
+		if err == nil {
+			data, err := os.ReadFile(path)
+			if err == nil {
+				baseRaw := parseRawTheme(data)
+				base = MergeThemes(base, baseRaw)
+			}
+		}
+	}
+
 	override := resolveTheme(wrapper.Theme)
-	defaults := DefaultTheme()
-	return MergeThemes(defaults, override)
+	return MergeThemes(base, override)
 }
 
 func parseRawTheme(data []byte) Theme {
@@ -118,8 +138,7 @@ func resolveModeTheme(raw rawModeTheme) ModeTheme {
 		Link:           ParseClasses(raw.Link),
 		Image:          ParseClasses(raw.Image),
 		List:           ParseClasses(raw.List),
-		HorizontalRule: ParseClasses(raw.HR),
-		Status:         ParseClasses(raw.Status),
+		Status: ParseClasses(raw.Status),
 		CodeInline:     ParseClasses(raw.Code.Inline),
 		CodeBlock:      ParseClasses(raw.Code.Block),
 		Table: TableTheme{
@@ -167,8 +186,7 @@ func mergeModeTheme(base, override ModeTheme) ModeTheme {
 		Link:           mergeStyle(base.Link, override.Link),
 		CodeInline:     mergeStyle(base.CodeInline, override.CodeInline),
 		CodeBlock:      mergeStyle(base.CodeBlock, override.CodeBlock),
-		HorizontalRule: mergeStyle(base.HorizontalRule, override.HorizontalRule),
-		Image:          mergeStyle(base.Image, override.Image),
+		Image:  mergeStyle(base.Image, override.Image),
 		List:           mergeStyle(base.List, override.List),
 		Status:         mergeStyle(base.Status, override.Status),
 		Table: TableTheme{

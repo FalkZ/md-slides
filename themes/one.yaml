@@ -1,21 +1,20 @@
-# yaml-language-server: $schema=./theme_schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/FalkZ/md-slides/refs/heads/main/theming/theme_schema.json
 # Colors sourced from Zed One Dark / One Light
 # https://github.com/zed-industries/zed/blob/main/assets/themes/one/one.json
 
 light:
   root: bg-[#fafafa]
   p: text-[#242529]
-  h1: text-[#5b79e3] font-bold underline decoration-double
-  h2: text-[#5b79e3] font-bold underline decoration-solid
+  h1: text-[#5b79e3] font-bold decoration-single decoration-double
+  h2: text-[#5b79e3] font-bold decoration-single
   h3: text-[#5b79e3] font-bold
   h4: text-[#5b79e3] font-bold
   h5: text-[#5b79e3] font-bold
   h6: text-[#5b79e3] font-bold
   blockquote: text-[#a2a3a7] font-italic
-  link: text-[#5b79e3] font-dim
+  link: text-[#5b79e3] font-dim decoration-single
   img: text-[#a2a3a7] font-italic
   list: text-[#242529]
-  hr: text-[#d4d4d8]
   status: text-[#242529]
   code:
     block: text-[#a2a3a7]
@@ -43,17 +42,16 @@ light:
 dark:
   root: bg-[#282c34]
   p: text-[#acb2be]
-  h1: text-[#73ade9] font-bold underline decoration-double
-  h2: text-[#73ade9] font-bold underline decoration-solid
+  h1: text-[#73ade9] font-bold decoration-single decoration-double
+  h2: text-[#73ade9] font-bold decoration-single
   h3: text-[#73ade9] font-bold
   h4: text-[#73ade9] font-bold
   h5: text-[#73ade9] font-bold
   h6: text-[#73ade9] font-bold
   blockquote: text-[#5d636f] font-italic
-  link: text-[#73ade9] font-dim
+  link: text-[#73ade9] font-dim decoration-single
   img: text-[#5d636f] font-italic
   list: text-[#acb2be]
-  hr: text-[#3e4451]
   status: text-[#acb2be]
   code:
     block: text-[#5d636f]

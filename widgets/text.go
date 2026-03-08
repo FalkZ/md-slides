@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strings"
+	"sync/atomic"
 
 	"git.sr.ht/~rockorager/vaxis"
 	"git.sr.ht/~rockorager/vaxis/vxfw"
@@ -13,6 +14,8 @@ import (
 	"github.com/yuin/goldmark/ast"
 	east "github.com/yuin/goldmark/extension/ast"
 )
+
+var linkIDCounter atomic.Uint64
 
 var defaultInlineTheme = struct {
 	CodeInline vaxis.Style
@@ -50,6 +53,7 @@ func mergeStyle(base, inline vaxis.Style) vaxis.Style {
 	}
 	if inline.Hyperlink != "" {
 		result.Hyperlink = inline.Hyperlink
+		result.HyperlinkParams = inline.HyperlinkParams
 	}
 	return result
 }
@@ -149,7 +153,14 @@ func collectInlineSegments(n ast.Node, source []byte) []vaxis.Segment {
 				s := currentStyle()
 				s.Foreground = defaultInlineTheme.Link.Foreground
 				s.Attribute |= defaultInlineTheme.Link.Attribute
+				// Underline is always required for links — some terminals need it to make them clickable
+				if defaultInlineTheme.Link.UnderlineStyle != 0 {
+					s.UnderlineStyle = defaultInlineTheme.Link.UnderlineStyle
+				} else {
+					s.UnderlineStyle = vaxis.UnderlineSingle
+				}
 				s.Hyperlink = string(link.Destination)
+				s.HyperlinkParams = fmt.Sprintf("id=%d", linkIDCounter.Add(1))
 				styleStack = append(styleStack, s)
 			} else if len(styleStack) > 0 {
 				styleStack = styleStack[:len(styleStack)-1]
@@ -192,7 +203,14 @@ func collectInlineSegments(n ast.Node, source []byte) []vaxis.Segment {
 				s := currentStyle()
 				s.Foreground = defaultInlineTheme.Link.Foreground
 				s.Attribute |= defaultInlineTheme.Link.Attribute
+				// Underline is always required for links — some terminals need it to make them clickable
+				if defaultInlineTheme.Link.UnderlineStyle != 0 {
+					s.UnderlineStyle = defaultInlineTheme.Link.UnderlineStyle
+				} else {
+					s.UnderlineStyle = vaxis.UnderlineSingle
+				}
 				s.Hyperlink = string(al.URL(source))
+				s.HyperlinkParams = fmt.Sprintf("id=%d", linkIDCounter.Add(1))
 				segs = append(segs, vaxis.Segment{
 					Text:  string(al.Label(source)),
 					Style: s,
