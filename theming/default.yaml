@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/FalkZ/md-slides/refs/heads/main/theming/theme_schema.json
+# Minimal default theme — basic text colors, no backgrounds
+
+light:
+  p: text-[#1a1a1a]
+  h1: font-bold
+  h2: font-bold
+  h3: font-bold
+  h4: font-bold
+  h5: font-bold
+  h6: font-bold
+  blockquote: font-italic
+  link: decoration-single
+  img: font-italic
+  list: text-[#1a1a1a]
+  status: text-[#1a1a1a]
+  code:
+    block: text-[#4a4a4a]
+    inline: text-[#4a4a4a]
+
+dark:
+  p: text-[#e0e0e0]
+  h1: font-bold
+  h2: font-bold
+  h3: font-bold
+  h4: font-bold
+  h5: font-bold
+  h6: font-bold
+  blockquote: font-italic
+  link: decoration-single
+  img: font-italic
+  list: text-[#e0e0e0]
+  status: text-[#e0e0e0]
+  code:
+    block: text-[#a0a0a0]
+    inline: text-[#a0a0a0]

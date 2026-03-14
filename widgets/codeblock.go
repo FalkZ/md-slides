@@ -42,13 +42,34 @@ func (w *CodeBlockWidget) Xml() XmlNode {
 
 func (w *CodeBlockWidget) Draw(ctx vxfw.DrawContext) (vxfw.Surface, error) {
 	code := strings.TrimRight(w.Code, "\n")
+	var surf vxfw.Surface
+	var err error
 	if segs := w.highlightCode(code, w.Lang); segs != nil {
 		rt := richtext.New(segs)
-		return rt.Draw(ctx)
+		surf, err = rt.Draw(ctx)
+	} else {
+		t := vxtext.New(code)
+		t.Style = w.Style
+		surf, err = t.Draw(ctx)
 	}
-	t := vxtext.New(code)
-	t.Style = w.Style
-	return t.Draw(ctx)
+	if err != nil {
+		return surf, err
+	}
+	if w.Style.Background != 0 {
+		fillBg(&surf, w.Style.Background)
+	}
+	return surf, nil
+}
+
+func fillBg(surf *vxfw.Surface, bg vaxis.Color) {
+	for i, cell := range surf.Buffer {
+		if cell.Character.Grapheme == "" && cell.Style.Background == 0 {
+			surf.Buffer[i] = vaxis.Cell{
+				Character: vaxis.Character{Grapheme: " ", Width: 1},
+				Style:     vaxis.Style{Background: bg},
+			}
+		}
+	}
 }
 
 var highlighterCache = map[string]*gotreesitter.Highlighter{}
@@ -108,6 +129,7 @@ func (w *CodeBlockWidget) highlightCode(code, lang string) []vaxis.Segment {
 		}
 		style := w.Style
 		if s, ok := w.Syntax.StyleFor(r.Capture); ok {
+			s.Background = w.Style.Background
 			style = s
 		}
 		segs = append(segs, vaxis.Segment{

@@ -9,6 +9,7 @@ import (
 	"git.sr.ht/~rockorager/vaxis/vxfw"
 	"git.sr.ht/~rockorager/vaxis/vxfw/richtext"
 	"git.sr.ht/~rockorager/vaxis/vxfw/vxlayout"
+	"github.com/FalkZ/md-slides/theming"
 	"github.com/yuin/goldmark/ast"
 )
 
@@ -26,13 +27,15 @@ type ListWidget struct {
 	Start   int
 	Depth   int
 	Items   []ListItem
+	style   vaxis.Style
 }
 
-func newListAtDepth(l *ast.List, source []byte, depth int) *ListWidget {
+func newListAtDepth(l *ast.List, source []byte, theme theming.ModeTheme, depth int) *ListWidget {
 	w := &ListWidget{
 		Ordered: l.IsOrdered(),
 		Start:   l.Start,
 		Depth:   depth,
+		style:   theme.List,
 	}
 	for item := l.FirstChild(); item != nil; item = item.NextSibling() {
 		if item.Kind() != ast.KindListItem {
@@ -41,7 +44,7 @@ func newListAtDepth(l *ast.List, source []byte, depth int) *ListWidget {
 		var blocks []ListItemBlock
 		for block := item.FirstChild(); block != nil; block = block.NextSibling() {
 			if block.Kind() == ast.KindList {
-				blocks = append(blocks, ListItemBlock{Sublist: newListAtDepth(block.(*ast.List), source, depth+1)})
+				blocks = append(blocks, ListItemBlock{Sublist: newListAtDepth(block.(*ast.List), source, theme, depth+1)})
 			} else if block.Kind() == ast.KindParagraph || block.Kind() == ast.KindTextBlock {
 				blocks = append(blocks, ListItemBlock{Segments: collectInlineSegments(block, source)})
 			}
@@ -51,8 +54,8 @@ func newListAtDepth(l *ast.List, source []byte, depth int) *ListWidget {
 	return w
 }
 
-func NewList(l *ast.List, source []byte) *ListWidget {
-	return newListAtDepth(l, source, 0)
+func NewList(l *ast.List, source []byte, theme theming.ModeTheme) *ListWidget {
+	return newListAtDepth(l, source, theme, 0)
 }
 
 func (w *ListWidget) Xml() XmlNode {
@@ -101,18 +104,21 @@ func (w *ListWidget) Draw(ctx vxfw.DrawContext) (vxfw.Surface, error) {
 				items = append(items, &vxlayout.FlexItem{Widget: block.Sublist})
 				continue
 			}
-			segs := block.Segments
+			segs := make([]vaxis.Segment, len(block.Segments))
+			for i, seg := range block.Segments {
+				segs[i] = vaxis.Segment{Text: seg.Text, Style: mergeStyle(w.style, seg.Style)}
+			}
 			if first {
-				segs = append([]vaxis.Segment{{Text: bullet}}, segs...)
+				segs = append([]vaxis.Segment{{Text: bullet, Style: w.style}}, segs...)
 				first = false
 			} else {
-				segs = append([]vaxis.Segment{{Text: indent + "    "}}, segs...)
+				segs = append([]vaxis.Segment{{Text: indent + "    ", Style: w.style}}, segs...)
 			}
 			rt := richtext.New(segs)
 			items = append(items, &vxlayout.FlexItem{Widget: rt})
 		}
 		if first {
-			rt := richtext.New([]vaxis.Segment{{Text: bullet}})
+			rt := richtext.New([]vaxis.Segment{{Text: bullet, Style: w.style}})
 			items = append(items, &vxlayout.FlexItem{Widget: rt})
 		}
 	}

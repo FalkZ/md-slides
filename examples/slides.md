@@ -1,32 +1,13 @@
 ---
 # You can uncomment this to create your own theme.
 # theme:
+#   base: ../themes/liip.yaml
 #   light:
 #     root: bg-white
 #     h1: text-blue-600 font-bold
-#     h2: text-blue-500
-#     blockquote: text-gray-500 font-italic
-#     code:
-#       block: bg-gray-100
-#       inline: bg-gray-100 text-rose-600
-#       syntax:
-#         keyword: text-purple-600 font-bold
-#         string: text-green-700
-#         comment: text-gray-400 font-italic
-#         function: text-blue-600
 #   dark:
 #     root: bg-slate-900
 #     h1: text-sky-400 font-bold
-#     h2: text-sky-300
-#     blockquote: text-slate-400 font-italic
-#     code:
-#       block: bg-slate-800
-#       inline: bg-slate-800 text-orange-400
-#       syntax:
-#         keyword: text-violet-400 font-bold
-#         string: text-green-400
-#         comment: text-slate-500 font-italic
-#         function: text-sky-400
 ---
 
 # md-slides
@@ -191,19 +172,79 @@ Press `t` to toggle between light and dark mode.
 
 ## Theme inheritance
 
-Use `extends` to inherit from a base theme (URL or local path):
+Use `base` to inherit from a base theme (URL or local path):
 
 ```yaml
 ---
 theme:
-  extends: https://example.com/theme.yaml
+  base: https://example.com/theme.yaml
   light:
     h1: text-red-600
 ---
 ```
 
-Merge order: default → extended → local overrides.
+### Merge Order
+
+Merge order: default / base → local overrides.
 
 ---
 
 # Go present something.
+
+---
+
+# Reference
+
+## Markdown
+
+- **Bold**: `**bold**`
+- _Italic_: `_italic_`
+- ~~Strikethrough~~: `~~strikethrough~~`
+- `Inline code`: `` `code` ``
+- [Links](https://example.com): `[text](url)`
+- Autolinks: `<https://example.com>`
+- Images: `![alt](path)`
+- Images with height: `![alt | rows](path)`
+
+## Code Blocks
+
+```yaml
+---
+theme:
+  light:
+    h1: text-blue-600 font-bold
+    code:
+      syntax:
+        keyword: text-purple-600
+  dark:
+    h1: text-sky-400 font-bold
+---
+```
+
+## Lists
+
+- Unordered item
+  - Nested item
+
+1. Ordered item
+2. Another item
+
+## Blockquotes
+
+> Quote text
+
+## Tables
+
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
+
+## Images
+
+![Make a sandwich | 8](./xkcd-sandwich.png)
+
+_Image from: <https://xkcd.com/149/>_
+
+If an image can't load, the alt text is shown instead:
+
+![This alt text is shown as fallback](./nonexistent.png)

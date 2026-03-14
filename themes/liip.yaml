@@ -1,0 +1,77 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/FalkZ/md-slides/refs/heads/main/theming/theme_schema.json
+# Colors sourced from liip.ch (dark and light mode)
+# https://www.liip.ch
+
+light:
+  root: bg-[#FAFAFA]
+  p: text-[#222222]
+  h1: text-[#7CB300] font-bold decoration-double
+  h2: text-[#7CB300] font-bold decoration-single
+  h3: text-[#7CB300] font-bold
+  h4: text-[#7CB300] font-bold
+  h5: text-[#7CB300] font-bold
+  h6: text-[#7CB300] font-bold
+  blockquote: text-[#6B6B6B] font-italic
+  link: text-[#199F00] decoration-single
+  img: text-[#808080] font-italic
+  list: text-[#222222]
+  status: text-[#222222]
+  code:
+    block: text-[#333333] bg-[#EEEEEE]
+    inline: text-[#222222]
+    syntax:
+      keyword: text-[#0F8968] font-bold
+      string: text-[#0D8A6F]
+      comment: text-[#6B7F99] font-italic
+      function: text-[#1558D6]
+      function_method: text-[#1558D6]
+      function_builtin: text-[#0068A8]
+      function_name: text-[#1558D6]
+      type: text-[#0068A8]
+      number: text-[#5A8F00]
+      operator: text-[#0068A8]
+      variable: text-[#2B2B2B]
+      property: text-[#0D8A6F]
+      constant_builtin: text-[#5A8F00] font-bold
+      escape: text-[#0D8A6F]
+  table:
+    header: text-[#222222] font-bold
+    cell: text-[#222222]
+    separator: text-[#EEEEEE]
+
+dark:
+  root: bg-[#222222]
+  p: text-[#FAFAFA]
+  h1: text-[#AEEA00] font-bold decoration-double
+  h2: text-[#AEEA00] font-bold decoration-single
+  h3: text-[#AEEA00] font-bold
+  h4: text-[#AEEA00] font-bold
+  h5: text-[#AEEA00] font-bold
+  h6: text-[#AEEA00] font-bold
+  blockquote: text-[#6B6B6B] font-italic
+  link: text-[#AEEA00] decoration-single
+  img: text-[#555555] font-italic
+  list: text-[#FAFAFA]
+  status: text-[#FAFAFA]
+  code:
+    block: text-[#EEEEEE] bg-[#000000]
+    inline: text-[#FAFAFA]
+    syntax:
+      keyword: text-[#47EBB4] font-bold
+      string: text-[#47EBB4]
+      comment: text-[#6E86A3] font-italic
+      function: text-[#7BB6FD]
+      function_method: text-[#7BB6FD]
+      function_builtin: text-[#0FBD83]
+      function_name: text-[#7BB6FD]
+      type: text-[#0FBD83]
+      number: text-[#AEEA00]
+      operator: text-[#0FBD83]
+      variable: text-[#EEEEEE]
+      property: text-[#47EBB4]
+      constant_builtin: text-[#AEEA00] font-bold
+      escape: text-[#47EBB4]
+  table:
+    header: text-[#FAFAFA] font-bold
+    cell: text-[#FAFAFA]
+    separator: text-[#555555]

@@ -41,7 +41,7 @@ func NewSlide(nodes []ast.Node, source []byte, theme theming.ModeTheme) Slide {
 		case ast.KindFencedCodeBlock, ast.KindCodeBlock:
 			widget = NewCodeBlock(node, source, theme)
 		case ast.KindList:
-			widget = NewList(node.(*ast.List), source)
+			widget = NewList(node.(*ast.List), source, theme)
 		case ast.KindBlockquote:
 			widget = NewBlockquote(node, source, theme)
 		default:

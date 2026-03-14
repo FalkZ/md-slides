@@ -8,13 +8,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var defaultThemeYAML []byte
+//go:embed default.yaml
+var mergeBaseYAML []byte
+
+var fallbackThemeYAML []byte
 
 //go:embed theme_schema.json
 var themeSchemaJSON []byte
 
-func SetDefaultThemeYAML(data []byte) {
-	defaultThemeYAML = data
+func SetFallbackThemeYAML(data []byte) {
+	fallbackThemeYAML = data
 }
 
 func ThemeSchema() []byte {
@@ -22,7 +25,7 @@ func ThemeSchema() []byte {
 }
 
 type rawTheme struct {
-	Extends string       `yaml:"extends"`
+	Base string       `yaml:"base"`
 	Light   rawModeTheme `yaml:"light"`
 	Dark    rawModeTheme `yaml:"dark"`
 }
@@ -75,7 +78,11 @@ type rawTableTheme struct {
 }
 
 func DefaultTheme() Theme {
-	return parseRawTheme(defaultThemeYAML)
+	return parseRawTheme(mergeBaseYAML)
+}
+
+func FallbackTheme() Theme {
+	return parseRawTheme(fallbackThemeYAML)
 }
 
 func ParseTheme(frontmatterYAML []byte) Theme {
@@ -84,18 +91,21 @@ func ParseTheme(frontmatterYAML []byte) Theme {
 
 func ParseThemeWithResolver(frontmatterYAML []byte, resolver func(string) (string, error)) Theme {
 	if len(frontmatterYAML) == 0 {
-		return DefaultTheme()
+		return FallbackTheme()
 	}
 	var wrapper struct {
-		Theme rawTheme `yaml:"theme"`
+		Theme *rawTheme `yaml:"theme"`
 	}
 	if err := yaml.Unmarshal(frontmatterYAML, &wrapper); err != nil {
-		return DefaultTheme()
+		return FallbackTheme()
+	}
+	if wrapper.Theme == nil {
+		return FallbackTheme()
 	}
 
 	base := DefaultTheme()
-	if wrapper.Theme.Extends != "" && resolver != nil {
-		path, err := resolver(wrapper.Theme.Extends)
+	if wrapper.Theme.Base != "" && resolver != nil {
+		path, err := resolver(wrapper.Theme.Base)
 		if err == nil {
 			data, err := os.ReadFile(path)
 			if err == nil {
@@ -105,7 +115,7 @@ func ParseThemeWithResolver(frontmatterYAML []byte, resolver func(string) (strin
 		}
 	}
 
-	override := resolveTheme(wrapper.Theme)
+	override := resolveTheme(*wrapper.Theme)
 	return MergeThemes(base, override)
 }
 

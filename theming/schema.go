@@ -55,7 +55,7 @@ func Validate(frontmatterYAML []byte) []ValidationWarning {
 
 	var warnings []ValidationWarning
 	for modeName, modeNode := range wrapper.Theme {
-		if modeName == "extends" {
+		if modeName == "base" {
 			continue
 		}
 		if modeName != "light" && modeName != "dark" {

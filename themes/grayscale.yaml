@@ -1,0 +1,77 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/FalkZ/md-slides/refs/heads/main/theming/theme_schema.json
+# Font-weight-only grayscale theme
+# Minimal shades, bold/italic differentiation
+
+light:
+  root: bg-[#fafafa]
+  p: text-[#2b2b2b]
+  h1: text-[#1a1a1a] font-bold decoration-single decoration-double
+  h2: text-[#1a1a1a] font-bold decoration-single
+  h3: text-[#1a1a1a] font-bold
+  h4: text-[#1a1a1a] font-bold
+  h5: text-[#1a1a1a] font-bold
+  h6: text-[#1a1a1a] font-bold
+  blockquote: text-[#5e5e5e] font-italic
+  link: text-[#2b2b2b] font-bold decoration-single
+  img: text-[#5e5e5e] font-italic
+  list: text-[#2b2b2b]
+  status: text-[#2b2b2b]
+  code:
+    block: text-[#5e5e5e]
+    inline: text-[#2b2b2b] font-bold
+    syntax:
+      keyword: text-[#2b2b2b] font-bold
+      string: text-[#2b2b2b]
+      comment: text-[#808080] font-italic
+      function: text-[#2b2b2b]
+      function_method: text-[#2b2b2b]
+      function_builtin: text-[#2b2b2b]
+      function_name: text-[#2b2b2b] font-bold
+      type: text-[#2b2b2b] font-italic
+      number: text-[#2b2b2b]
+      operator: text-[#606060]
+      variable: text-[#2b2b2b]
+      property: text-[#2b2b2b]
+      constant_builtin: text-[#2b2b2b] font-bold font-italic
+      escape: text-[#2b2b2b] font-bold
+  table:
+    header: text-[#1a1a1a] font-bold
+    cell: text-[#2b2b2b]
+    separator: text-[#d0d0d0]
+
+dark:
+  root: bg-[#1a1a1a]
+  p: text-[#d4d4d4]
+  h1: text-[#f0f0f0] font-bold decoration-single decoration-double
+  h2: text-[#f0f0f0] font-bold decoration-single
+  h3: text-[#f0f0f0] font-bold
+  h4: text-[#f0f0f0] font-bold
+  h5: text-[#f0f0f0] font-bold
+  h6: text-[#f0f0f0] font-bold
+  blockquote: text-[#a2a2a2] font-italic
+  link: text-[#d4d4d4] font-bold decoration-single
+  img: text-[#a2a2a2] font-italic
+  list: text-[#d4d4d4]
+  status: text-[#d4d4d4]
+  code:
+    block: text-[#a2a2a2]
+    inline: text-[#d4d4d4] font-bold
+    syntax:
+      keyword: text-[#d4d4d4] font-bold
+      string: text-[#d4d4d4]
+      comment: text-[#7a7a7a] font-italic
+      function: text-[#d4d4d4]
+      function_method: text-[#d4d4d4]
+      function_builtin: text-[#d4d4d4]
+      function_name: text-[#d4d4d4] font-bold
+      type: text-[#d4d4d4] font-italic
+      number: text-[#d4d4d4]
+      operator: text-[#a0a0a0]
+      variable: text-[#d4d4d4]
+      property: text-[#d4d4d4]
+      constant_builtin: text-[#d4d4d4] font-bold font-italic
+      escape: text-[#d4d4d4] font-bold
+  table:
+    header: text-[#f0f0f0] font-bold
+    cell: text-[#d4d4d4]
+    separator: text-[#3a3a3a]

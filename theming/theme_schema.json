@@ -4,6 +4,10 @@
   "description": "Theme configuration for md-slides. Values are space-separated Tailwind-like classes: bg-{color}-{shade}, text-{color}-{shade}, font-bold, font-italic, font-dim, decoration-single, decoration-solid, decoration-double, decoration-wavy, decoration-dotted, decoration-dashed. Hex colors supported: text-[#rrggbb], bg-[#rrggbb].",
   "type": "object",
   "properties": {
+    "base": {
+      "type": "string",
+      "description": "URL or local path to a base theme YAML file"
+    },
     "light": { "$ref": "#/$defs/modeTheme" },
     "dark": { "$ref": "#/$defs/modeTheme" }
   },

@@ -17,10 +17,32 @@ import (
 )
 
 //go:embed themes/one.yaml
-var defaultThemeYAML []byte
+var fallbackThemeYAML []byte
+
+var canSetTerminalBackground = os.Getenv("TMUX") == "" &&
+	os.Getenv("STY") == "" &&
+	os.Getenv("MOSH_CONNECTION") == ""
 
 func init() {
-	theming.SetDefaultThemeYAML(defaultThemeYAML)
+	theming.SetFallbackThemeYAML(fallbackThemeYAML)
+}
+
+func setTerminalBackground(color vaxis.Color) {
+	if !canSetTerminalBackground || color == 0 {
+		return
+	}
+	params := color.Params()
+	if len(params) != 4 || params[0] != 2 {
+		return
+	}
+	fmt.Fprintf(os.Stdout, "\033]11;rgb:%02x/%02x/%02x\033\\", params[1], params[2], params[3])
+}
+
+func resetTerminalBackground() {
+	if !canSetTerminalBackground {
+		return
+	}
+	fmt.Fprint(os.Stdout, "\033]112\033\\")
 }
 
 func initLog(debug bool) *os.File {
@@ -129,7 +151,7 @@ func main() {
 	}
 
 	currentMode := theming.Dark
-	parsed := parseMarkdown(raw, currentMode)
+	parsed := parseMarkdown(raw, currentMode, baseDir)
 	slides := parsed.slides
 	theme := parsed.theme
 	if len(slides) == 0 {
@@ -181,6 +203,7 @@ func main() {
 		os.Exit(1)
 	}
 	defer vx.Close()
+	defer resetTerminalBackground()
 	defer cleanupTempFiles()
 
 	initW, initH := vx.Window().Size()
@@ -209,6 +232,7 @@ func main() {
 		if rootBg.Background != 0 {
 			win.Fill(vaxis.Cell{Style: vaxis.Style{Background: rootBg.Background}})
 		}
+		setTerminalBackground(rootBg.Background)
 		w, h := win.Size()
 		slog.Debug("render", "page", page, "width", w, "height", h)
 

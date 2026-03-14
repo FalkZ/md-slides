@@ -1,24 +1,25 @@
 # Naming
 
-- Always use full words e.g. cellHeight over cellH
+- ALWAYS use full words e.g. `cellHeight` over `cellH`
 
 # Widgets `./widgets/*.go`
 
-- Every markdown element has a corresponding vaxis widget in `./widgets`
-- Every widget has
-  - a struct
-    - containing all the information of this object
-    - but no ast types (at this point they are fully abstracted away)
-  - an `new*` function that converts an ast type to a struct
-  - a Draw function that renders the widget as
-  - a Xml function that 1:1 represents what will be rendered as a widget
-  - the `./widgets/` folder only contains widgets nothing else
+Each markdown element has a corresponding vaxis widget in `./widgets/`.
+
+Every widget has:
+
+- A **struct** containing all information for this element. NO ast types — they are fully abstracted away at this point.
+- A `new*` function that converts an ast type to the struct.
+- A `Draw` function that renders the widget.
+- A `Xml` function that 1:1 represents what will be rendered.
+
+The `./widgets/` folder contains ONLY widgets, nothing else.
 
 # Theming `./theming`
 
-## Frontmatter `./theming/parse-frontmatter.go`
+## Frontmatter `./theming/frontmatter.go`
 
-Theming is done via frontmatter and a subset of tailwind.
+Theming uses frontmatter and a subset of tailwind classes.
 
 ```md
 ---
@@ -39,47 +40,72 @@ theme:
 # Start of Slides
 ```
 
-## Supported tailwind classes `./theming/tailwind-parser.go`
+## Supported Tailwind Classes `./theming/tailwind-parser.go`
 
-- bg-red-200
-- text-red-200
-- font-bold
-- font-italic
+- `bg-red-200`
+- `text-red-200`
+- `font-bold`
+- `font-italic`
+- font-dim, decoration-single, decoration-solid, decoration-double, decoration-wavy, decoration-dotted, decoration-dashed
 
-## Default theme `./theming/default-theme.yaml`
+## Default Theme `./theming/default.yaml`
 
-There is a default theme that mimics the zed one dark & light themes closely.
-Values that are not provided in the frontmatter fall back to the default.
+The default theme is minimal and adds very little styling.
 
-## Light / dark mode
-
-Selection of the mode is done via system preference. and can be changed with a keybinding.
-
-## Theme schema `./theming/schema.go`
-
-The whole theme schema is validated and gives warnings in the footer when theme is invalid.
-A JSON schema definition is used to validate.
-
-## Theme extension
-
-Themes can be loaded by the extends keyword.
+When providing a partial theme without a base:
 
 ```md
 ---
 theme:
-  extends: https://example.com/theme.yaml
+  light:
+    root: bg-white
 ---
 ```
 
-# Url Loading `./fetch.go`
+The default theme is used as base.
 
-Themes and images can also be provided by url.
+If NO frontmatter theme key is present, use the `one.yaml` theme.
 
-On encountering url use a utility that fetches these resources and stores them in the os's temp folder.
-The them files should be deleted on tui closing.
+## Light / Dark Mode
 
-Handle failed fetches gracefully.
+Mode is selected via system preference. Can be changed with `t` keybinding.
 
-Always refetch on restart of the tui.
+## Theme Schema `./theming/schema.go`
 
-A `resolveUrl` function will resolve a url to a temp file path.
+The theme schema is validated using a JSON schema definition. Invalid themes show warnings in the footer.
+
+## Base Theme
+
+Base themes are loaded via the `base` keyword. Supports URLs and local paths.
+
+```md
+---
+theme:
+  base: https://example.com/theme.yaml
+---
+```
+
+## Theme Override
+
+Override specific keys while keeping a base theme.
+
+```md
+---
+theme:
+  base: ../local/theme.yaml
+  light:
+    root: bg-white
+---
+```
+
+Merging happens at key level — when a key is set, ALL base values for that key are ignored.
+
+# URL Loading `./fetch.go`
+
+Themes and images can be provided by URL.
+
+- A `resolveUrl` function resolves a URL to a temp file path.
+- Resources are fetched and stored in the OS temp folder.
+- Temp files are deleted on TUI close.
+- ALWAYS refetch on TUI restart.
+- Handle failed fetches gracefully.

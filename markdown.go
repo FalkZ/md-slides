@@ -1,6 +1,8 @@
 package main
 
 import (
+	"strings"
+
 	"github.com/FalkZ/md-slides/theming"
 	"github.com/FalkZ/md-slides/widgets"
 	"github.com/yuin/goldmark"
@@ -19,9 +21,15 @@ type parsedMarkdown struct {
 	source   []byte
 }
 
-func parseMarkdown(raw []byte, mode theming.Mode) parsedMarkdown {
+func parseMarkdown(raw []byte, mode theming.Mode, baseDir string) parsedMarkdown {
 	frontmatter, body := theming.ExtractFrontmatter(raw)
-	theme := theming.ParseThemeWithResolver(frontmatter, resolveUrl)
+	resolver := func(path string) (string, error) {
+		if strings.HasPrefix(path, "http://") || strings.HasPrefix(path, "https://") {
+			return resolveUrl(path)
+		}
+		return resolvePath(baseDir, path), nil
+	}
+	theme := theming.ParseThemeWithResolver(frontmatter, resolver)
 	warnings := theming.Validate(frontmatter)
 	doc := md.Parser().Parse(text.NewReader(body))
 	modeTheme := theme.ForMode(mode)

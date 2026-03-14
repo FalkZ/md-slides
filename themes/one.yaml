@@ -4,74 +4,74 @@
 
 light:
   root: bg-[#fafafa]
-  p: text-[#242529]
-  h1: text-[#5b79e3] font-bold decoration-single decoration-double
-  h2: text-[#5b79e3] font-bold decoration-single
-  h3: text-[#5b79e3] font-bold
-  h4: text-[#5b79e3] font-bold
-  h5: text-[#5b79e3] font-bold
-  h6: text-[#5b79e3] font-bold
-  blockquote: text-[#a2a3a7] font-italic
-  link: text-[#5b79e3] font-dim decoration-single
+  p: text-[#121317]
+  h1: text-[#ffffff] bg-[#4866c9] font-bold
+  h2: text-[#ffffff] bg-[#4866c9] font-bold
+  h3: text-[#4866c9] font-bold decoration-single
+  h4: text-[#4866c9] font-bold decoration-single
+  h5: text-[#4866c9] font-bold decoration-single
+  h6: text-[#4866c9] font-bold decoration-single
+  blockquote: text-[#6b6d72] font-italic
+  link: text-[#2a3f8a] decoration-single
   img: text-[#a2a3a7] font-italic
-  list: text-[#242529]
-  status: text-[#242529]
+  list: text-[#121317]
+  status: text-[#121317]
   code:
-    block: text-[#a2a3a7]
-    inline: text-[#d3604f]
+    block: text-[#6b6d72]
+    inline: text-[#e07468]
     syntax:
-      keyword: text-[#a449ab] font-bold
-      string: text-[#649f57]
-      comment: text-[#a2a3a7] font-italic
-      function: text-[#5b79e3]
-      function_method: text-[#5b79e3]
-      function_builtin: text-[#3882b7]
-      function_name: text-[#5b79e3]
-      type: text-[#3882b7]
-      number: text-[#ad6e25]
-      operator: text-[#3882b7]
+      keyword: text-[#b85dc0] font-bold
+      string: text-[#78b56b]
+      comment: text-[#6b6d72] font-italic
+      function: text-[#6f8ef0]
+      function_method: text-[#6f8ef0]
+      function_builtin: text-[#4a98cc]
+      function_name: text-[#6f8ef0]
+      type: text-[#4a98cc]
+      number: text-[#c48535]
+      operator: text-[#4a98cc]
       variable: text-[#242529]
-      property: text-[#d3604f]
-      constant_builtin: text-[#ad6e25] font-bold
-      escape: text-[#d3604f]
+      property: text-[#e07468]
+      constant_builtin: text-[#c48535] font-bold
+      escape: text-[#e07468]
   table:
-    header: text-[#5b79e3] font-bold
-    cell: text-[#242529]
+    header: text-[#4866c9] font-bold
+    cell: text-[#121317]
     separator: text-[#d4d4d8]
 
 dark:
   root: bg-[#282c34]
-  p: text-[#acb2be]
-  h1: text-[#73ade9] font-bold decoration-single decoration-double
-  h2: text-[#73ade9] font-bold decoration-single
-  h3: text-[#73ade9] font-bold
-  h4: text-[#73ade9] font-bold
-  h5: text-[#73ade9] font-bold
-  h6: text-[#73ade9] font-bold
-  blockquote: text-[#5d636f] font-italic
-  link: text-[#73ade9] font-dim decoration-single
+  p: text-[#d5dae6]
+  h1: text-[#000000] bg-[#5a8ed8] font-bold
+  h2: text-[#000000] bg-[#5a8ed8] font-bold
+  h3: text-[#5a8ed8] font-bold decoration-single
+  h4: text-[#5a8ed8] font-bold decoration-single
+  h5: text-[#5a8ed8] font-bold decoration-single
+  h6: text-[#5a8ed8] font-bold decoration-single
+  blockquote: text-[#9aa0ad] font-italic
+  link: text-[#9ac2f5] decoration-single
   img: text-[#5d636f] font-italic
-  list: text-[#acb2be]
-  status: text-[#acb2be]
+  list: text-[#d5dae6]
+  status: text-[#d5dae6]
   code:
-    block: text-[#5d636f]
-    inline: text-[#d07277]
+    block: text-[#9aa0ad]
+    inline: text-[#e08589]
     syntax:
-      keyword: text-[#b477cf] font-bold
-      string: text-[#a1c181]
-      comment: text-[#5d636f] font-italic
-      function: text-[#73ade9]
-      function_method: text-[#73ade9]
-      function_builtin: text-[#6eb4bf]
-      function_name: text-[#73ade9]
-      type: text-[#6eb4bf]
-      number: text-[#bf956a]
-      operator: text-[#6eb4bf]
-      variable: text-[#acb2be]
-      property: text-[#d07277]
-      constant_builtin: text-[#bf956a] font-bold
-      escape: text-[#d07277]
+      keyword: text-[#c98de5] font-bold
+      string: text-[#b5d49a]
+      comment: text-[#9aa0ad] font-italic
+      function: text-[#8ec0f0]
+      function_method: text-[#8ec0f0]
+      function_builtin: text-[#88ccd6]
+      function_name: text-[#8ec0f0]
+      type: text-[#88ccd6]
+      number: text-[#d4aa80]
+      operator: text-[#88ccd6]
+      variable: text-[#c0c6d2]
+      property: text-[#e08589]
+      constant_builtin: text-[#d4aa80] font-bold
+      escape: text-[#e08589]
   table:
-    header: text-[#73ade9] font-bold
-    cell: text-[#acb2be]
+    header: text-[#5a8ed8] font-bold
+    cell: text-[#d5dae6]
     separator: text-[#3e4451]

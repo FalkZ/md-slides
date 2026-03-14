@@ -140,12 +140,12 @@ Colors: slate, gray, zinc, neutral, stone, red, orange, amber, yellow, lime, gre
 
 ### Theme Extension
 
-Use the `extends` property to base your theme on an external theme file (local path or URL). Only the keys you specify are overridden; everything else is inherited from the extended theme:
+Use the `base` property to base your theme on an external theme file (local path or URL). Only the keys you specify are overridden; everything else is inherited from the base theme:
 
 ```yaml
 ---
 theme:
-  extends: https://example.com/my-base-theme.yaml
+  base: https://example.com/my-base-theme.yaml
   light:
     h1: text-pink-500 font-bold
   dark:
